@@ -9,12 +9,16 @@ import sys
 
 
 def getPath():
-    tk.Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-    filename = askopenfilename(title="Open") # show an "Open" dialog box and return the path to the selected file
+    tk.Tk().withdraw() 
+    filename = askopenfilename(title="Open") 
     return filename
 
 
-def save(elevation, slope, profCurv, planCurv, aspect, relativeRelief, profile, flowDir, flowAccu, TWI, distRiver, base, filename):
+def save(elevation, slope, profCurv, planCurv, aspect, relativeRelief, profile, flowDir, flowAccu, TWI, distRiver, path, cityList):
+    provinceName=cityList[0]
+    provinceName = provinceName.replace(' ', '_')
+    cityName=cityList[1]
+    cityName =  cityName.replace(' ', '_')
 
     ###Saving Slope
     slope_profile = profile.copy()
@@ -27,37 +31,37 @@ def save(elevation, slope, profCurv, planCurv, aspect, relativeRelief, profile, 
     nodata=-9999
     )
 
-    savePath = f"{base}/data/processed/{filename}/"
+    savePath = f"{path}/OutputRaster/{provinceName}/{cityName}/"
     os.makedirs(savePath, exist_ok=True)
     
-    with rasterio.open(f"{savePath}_elevation.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_elevation.tif", "w", **slope_profile) as dst:
         dst.write(elevation.astype(np.float32), 1)
 
-    with rasterio.open(f"{savePath}_slope.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_slope.tif", "w", **slope_profile) as dst:
         dst.write(slope.astype(np.float32), 1)
 
-    with rasterio.open(f"{savePath}_profCurv.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_profCurv.tif", "w", **slope_profile) as dst:
         dst.write(profCurv.astype(np.float32), 1)
 
-    with rasterio.open(f"{savePath}_planCurv.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_planCurv.tif", "w", **slope_profile) as dst:
         dst.write(planCurv.astype(np.float32), 1)
 
-    with rasterio.open(f"{savePath}_aspect.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_aspect.tif", "w", **slope_profile) as dst:
         dst.write(aspect.astype(np.float32), 1)
 
-    with rasterio.open(f"{savePath}_relativeRelief.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_relativeRelief.tif", "w", **slope_profile) as dst:
         dst.write(relativeRelief.astype(np.float32), 1)
 
-    with rasterio.open(f"{savePath}_flowDirection.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_flowDirection.tif", "w", **slope_profile) as dst:
         dst.write(flowDir.astype(np.float64), 1)
     
-    with rasterio.open(f"{savePath}_flowAccumulation.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_flowAccumulation.tif", "w", **slope_profile) as dst:
         dst.write(flowAccu.astype(np.float64), 1)
 
-    with rasterio.open(f"{savePath}_TWI.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_TWI.tif", "w", **slope_profile) as dst:
         dst.write(TWI.astype(np.float64), 1)
     
-    with rasterio.open(f"{savePath}_distRiver.tif", "w", **slope_profile) as dst:
+    with rasterio.open(f"{savePath}{cityName}_distRiver.tif", "w", **slope_profile) as dst:
         dst.write(distRiver.astype(np.float64), 1)
 
 def extractDEM(file):
@@ -73,50 +77,60 @@ def extractDEM(file):
     return elevation, profile, transform, height
 
 
-def loadDEM():
-    os.system('cls')
-    demConfigPath = r"C:\Users\KennethBaluyos (EPA)\Documents\04 - Manifesting RSTF\Projects\Project Reworked\config"
+def loadDEM(base, demPath=None, loadFromConfig=False, city=None):
+    #os.system('cls')
+    provinceName=city[0]
+    provinceName = provinceName.replace(' ', '_')
+    cityName=city[1]
+    cityName =  cityName.replace(' ', '_')
    
-   
-    print("# ===== Phase 1: DEM Loading and Filling ===== #")
-    try: ## Reads config file...
-        print("Loading DEM from previous configuration...")
-        with open(f"{demConfigPath}/path_info.pkl", "rb") as t:
-            path_info = pickle.load(t)
+    if loadFromConfig:
+        try: ## Reads config file...
+            print("Loading DEM from previous configuration...")
+            with open(f"{base}/config/{provinceName}/{cityName}/path_info.pkl", "rb") as t:
+                path_info = pickle.load(t)
 
-        data = np.load(path_info[6], allow_pickle=True)
-        fn = os.path.basename(path_info[6])
-        filename = os.path.splitext(str.replace(fn, "_temp", ""))[0] 
+            data = np.load(path_info[6], allow_pickle=True)
+            fn = os.path.basename(path_info[6])
+            filename = os.path.splitext(str.replace(fn, "_temp", ""))[0] 
 
-        with open(path_info[3], "rb") as t:
-            profile = pickle.load(t)
+            with open(path_info[3], "rb") as t:
+                profile = pickle.load(t)
 
-        with open(path_info[4], "rb") as t:
-            transform = pickle.load(t)
+            with open(path_info[4], "rb") as t:
+                transform = pickle.load(t)
 
-        with open(path_info[5], "rb") as t:
-            height = pickle.load(t)
+            with open(path_info[5], "rb") as t:
+                height = pickle.load(t)
 
-        return data, profile, transform, height, filename
+            return data, profile, transform, height, filename
+        
+        except FileNotFoundError:
+            print("No previous DEM configuration found. Please select try loading from a DEM")
+            raise FileNotFoundError
+
     
-    except FileNotFoundError:
+    elif loadFromConfig == False:
         print("No previous DEM configuration found. Please select a DEM file.")
-        tk.Tk().withdraw()
+        print(demPath)
+
+        '''tk.Tk().withdraw()
         demPath = askopenfilename() 
         if not demPath.__contains__(".asc"):
             print(f"File at {demPath} is in incorrect file format...")
-            sys.exit()
+            sys.exit()'''
 
         
-        fn = os.path.basename(demPath) # Filename with extension
-        filename = os.path.splitext(fn)[0] 
+        fn = os.path.basename(demPath) # Filename with extension {city}.asc
+        filename = os.path.splitext(fn)[0] #{city}
 
         print(f"Now loading DEM {filename}.asc from: {demPath}")
 
         try:
+            #demPath is whole directory
             filePath = demPath
-            base = str.replace(str.replace(filePath, fn, ""), "/data/raw/", "") #return parent directory
-            savePath = f"{base}/data/temp/{filename}" # custom save folder for 
+            base = os.getcwd() #return parent directory
+            savePath = f"{base}/data/temp/{provinceName}/{cityName}" # custom save folder for the city
 
             data, profile, transform, height = extractDEM(filePath)
             dem_NPY_filename = savePath + f"/{filename}_temp.npy"
@@ -127,8 +141,8 @@ def loadDEM():
             path_info = np.array(["True", filePath, savePath, dem_profile_filename, dem_transform_filename, dem_height_filename, dem_NPY_filename])
 
 
-
             os.makedirs(f"{savePath}/", exist_ok=True)
+            os.makedirs(f"{base}/config/{provinceName}/{filename}", exist_ok=True)
 
 
             np.save(dem_NPY_filename, data)
@@ -142,7 +156,7 @@ def loadDEM():
             with open(dem_height_filename, "wb") as h:
                 pickle.dump(height, h)
 
-            with open(f"{base}/config/path_info.pkl", "wb") as l:
+            with open(f"{base}/config/{provinceName}/{filename}/path_info.pkl", "wb") as l:
                 pickle.dump(path_info, l)    
 
             return data, profile, transform, height, filename

@@ -515,7 +515,7 @@ def simulate_landslides(
         
         
     # --- 10) Optionally save KDE map as raster (AAIGrid or GeoTIFF depending on extension) ---
-    outputMapPath = f"{output_kde_map_path}/{sampling_method}/{threshold}/{sampling_method}_map.asc"
+    outputMapPath = f"{output_kde_map_path}/{sampling_method}/{threshold}/{sampling_method}_map.tif"
     if outputMapPath:
         out_meta = meta.copy()
         out_meta.update({

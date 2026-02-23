@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter.filedialog import asksaveasfilename
 
 
-def stack(arrayList, column, xllcorner, yllcorner, cellsize, filePath, fileBase, height):
+def stack(arrayList, column, xllcorner, yllcorner, cellsize, filePath, fileBase, height, fileOut):
     tk.Tk().withdraw()
     stacked = np.stack(arrayList, axis=2)
     nodes, coords = getDEMCoordinates(filePath, xllcorner, yllcorner, cellsize, height)
@@ -22,8 +22,8 @@ def stack(arrayList, column, xllcorner, yllcorner, cellsize, filePath, fileBase,
 
     df = pd.DataFrame(out, columns=column)
     print("Select ouput csv...")
-    fileOut = asksaveasfilename(title="Save Output CSV:")
-    fileOut = fileOut + f"_{fileBase}.csv"
+    #fileOut = asksaveasfilename(title="Save Output CSV:")
+    fileOut = fileOut + f"\{fileBase}.csv"
     df.to_csv(fileOut, index=False, float_format="%.6f")
 
     return out
