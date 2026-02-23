@@ -14,7 +14,6 @@ The system integrates:
 - Machine learning model training and validation  
 - Performance evaluation and visualization  
 
-This pipeline was developed as part of a Senior High School STEM Capstone research project focused on landslide susceptibility mapping in Cagayan de Oro City, Philippines.
 
 ---
 
@@ -32,7 +31,7 @@ The pipeline was designed to:
 
 ## Core Features
 
-### 1.) Automated Raster-Based Surface Parameter Extraction
+### a. ) Automated Raster-Based Surface Parameter Extraction
 
 Derived from SRTM DEM:
 - Elevation  
@@ -50,7 +49,7 @@ All computations are raster-based and optimized for large-scale grid processing.
 
 ---
 
-### 2.) Hybrid Landslide Point Simulation
+### b.) Hybrid Landslide Point Simulation
 
 To address limited landslide inventories, the pipeline implements five sampling strategies:
 
@@ -64,7 +63,7 @@ These methods simulate synthetic landslide and non-landslide points based on spa
 
 ---
 
-### 3.) Machine Learning Integration
+### c.) Machine Learning Integration
 
 Models implemented via WEKA:
 
@@ -74,14 +73,14 @@ Models implemented via WEKA:
 
 Performance Metrics:
 
-- Accuracy  
+- Accuracy  (Training and Validation)
 - F1-Score  
 - Area Under the Curve (AUC)  
 - Root Mean Square Error (RMSE)  
 
 ---
 
-### 4.) Validation Strategy
+### d.) Validation Strategy
 
 - 10-Fold Cross Validation  
 - Leave-One-Out Cross Validation (for small datasets)  
@@ -89,7 +88,7 @@ Performance Metrics:
 
 ---
 
-### 5.) Computational Efficiency
+### e.) Computational Efficiency
 
 - Raster-level processing optimized using NumPy  
 - Batch computation support  
