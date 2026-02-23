@@ -1,9 +1,8 @@
 # 🌍 Automated Surface Parameter Extraction & Hybrid Point Simulation Pipeline
-## Landslide Susceptibility Modeling using Python and Machine Learning
+#### (*Landslide Susceptibility Modeling using Python and Machine Learning*)
 
 ---
-
-## 📌 Overview
+## Overview
 
 This repository contains the source code for a Python-based geospatial pipeline developed for automated surface parameter extraction and landslide susceptibility modeling under data-scarce conditions.
 
@@ -19,7 +18,7 @@ This pipeline was developed as part of a Senior High School STEM Capstone resear
 
 ---
 
-## 🎯 Objectives
+## Objectives
 
 The pipeline was designed to:
 
@@ -31,12 +30,11 @@ The pipeline was designed to:
 
 ---
 
-## 🧠 Core Features
+## Core Features
 
-### 1️⃣ Automated Raster-Based Surface Parameter Extraction
+### 1.) Automated Raster-Based Surface Parameter Extraction
 
 Derived from SRTM DEM:
-
 - Elevation  
 - Slope (Zevenbergen & Thorne method)  
 - Aspect  
@@ -52,7 +50,7 @@ All computations are raster-based and optimized for large-scale grid processing.
 
 ---
 
-### 2️⃣ Hybrid Landslide Point Simulation
+### 2.) Hybrid Landslide Point Simulation
 
 To address limited landslide inventories, the pipeline implements five sampling strategies:
 
@@ -66,7 +64,7 @@ These methods simulate synthetic landslide and non-landslide points based on spa
 
 ---
 
-### 3️⃣ Machine Learning Integration
+### 3.) Machine Learning Integration
 
 Models implemented via WEKA:
 
@@ -83,7 +81,7 @@ Performance Metrics:
 
 ---
 
-### 4️⃣ Validation Strategy
+### 4.) Validation Strategy
 
 - 10-Fold Cross Validation  
 - Leave-One-Out Cross Validation (for small datasets)  
@@ -91,7 +89,7 @@ Performance Metrics:
 
 ---
 
-### 5️⃣ Computational Efficiency
+### 5.) Computational Efficiency
 
 - Raster-level processing optimized using NumPy  
 - Batch computation support  
@@ -103,51 +101,36 @@ Performance Metrics:
 
 ## 🛠 Requirements
 
-Python 3.9+
-
-Required Libraries:
-- numpy
-- pandas
-- matplotlib
-- rasterio
-- pysheds
-- scikit-learn
-- weka-wrapper3
+- Python 3.9+
+	Required Libraries:
+	- numpy
+	- pandas
+	- matplotlib
+	- rasterio
+	- pysheds
+	- scikit-learn
+	- weka-wrapper3
 
 ---
 
 ## 🚀 How to Run
 
-### 1️⃣ Prepare Input Data
+### 1. Prepare Input Data
 
 - Place DEM raster inside `/data/dem/`
 - Add landslide inventory CSV file
-- Add river shapefile (if distance-to-river is enabled)
 
-### 2️⃣ Run the Pipeline
+### 2. Run the Pipeline
 
-Command-line version: "python main.py"
-GUI version: "python ui_main.py"
-
-
----
-
-## 📊 Example Workflow
-
-1. Load DEM  
-2. Extract surface parameters  
-3. Generate sampling map (BCS / KDS / HDS)  
-4. Simulate balanced dataset  
-5. Train ML model  
-6. Evaluate performance  
-7. Export susceptibility map  
+Command-line version: *"python main.py"*
+GUI version: *"python ui_main.py"*
 
 ---
 
 ## ⚠ Limitations
 
-- Limited landslide inventory size  
-- 90m DEM resolution may not capture fine-scale topographic variations  
+- Limited landslide inventory size (during initial testing)
+- Default 90m DEM resolution may not capture fine-scale topographic variations  
 - Synthetic point generation introduces potential structural dependence  
 - Validation limited to available inventory data  
 
@@ -172,16 +155,5 @@ January 2026
 
 This project is released under the  
 GNU General Public License (GPL) Version 2.
-
----
-
-## 🤝 Contributions
-
-This project is open-source and welcomes:
-
-- Improvements in spatial validation  
-- Optimization of raster computation  
-- Integration of higher-resolution DEM  
-- Implementation of spatial cross-validation  
 
 ---
